@@ -8,21 +8,19 @@
 
 import Foundation
 
-public struct Completion {
-	public typealias Hits = ([[String:Any]])->Void
-	public typealias Counts = ([(String, Int)])->Void
-	public typealias Strings = ([String])->Void
-}
-
 public struct Elastic {
 	private init() {}
 
-	public static var BASEURL:String!
+	/// Enables debug print of all json data sent and received.
 	public static var PRINT_DEBUG = false
 
+	private static var BASEURL:String!
+
 	/// Configure all future requests for elastic search.
-	public static func configure(at host:String, port:String = "9200") {
-		BASEURL = "http://\(host):\(port)"
+	public static func configure(_ protocol: Protocol = .http,
+								 ip host:String,
+								 port:String = "9200") {
+		BASEURL = "\(`protocol`)://\(host):\(port)"
 	}
 
 	/// Perform search operation
@@ -135,10 +133,12 @@ public struct Elastic {
 										  field:String,
 										  _ completion: @escaping Completion.Strings) {
 		let url = "\(Elastic.BASEURL!)/\(index)/_search?pretty"
-		let params:[String:Any] = ["_source":[field],
-								   "suggest": ["results": ["prefix":query,
-														   "completion": ["field":field,
-																		  "skip_duplicates":true]]]]
+		let params:[String:Any] = ["_source": [field],
+								   "suggest":
+									["results":
+										["prefix": query,
+										 "completion": ["field":field,
+														"skip_duplicates":true]]]]
 
 		if PRINT_DEBUG {
 			print(url)
