@@ -14,7 +14,7 @@ public struct Order {
 	private	init() {}
 
 	/// Dictionary to use in the query.
-	public private(set) var dict:[String:[String:Any]] = [:]
+	public internal(set) var dict:[String:[String:Any]] = [:]
 
 	/// Returns an empty filter.
 	public static var empty:Order { return .init() }
