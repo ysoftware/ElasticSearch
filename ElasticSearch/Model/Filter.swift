@@ -10,15 +10,17 @@ import Foundation
 
 /// Object to set up a search query.
 public struct Filter {
+
 	private	init() {}
 
 	/// Dictionary to use in the query.
 	public private(set) var dict:[String:Any] = [:]
 
 	/// Returns an empty filter.
-	public static var empty:Filter {
-		return Filter()
-	}
+	public static var empty:Filter { return .init() }
+}
+
+public extension Filter {
 
 	// MARK: - Compound
 

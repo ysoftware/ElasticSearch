@@ -10,7 +10,7 @@ import XCTest
 @testable import ElasticSearch
 
 class ElasticSearchTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
 

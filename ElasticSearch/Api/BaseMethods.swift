@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension Elastic {
+public extension Elastic {
 
-	/// Perform search operation
+	/// Perform search operation.
 	///
 	/// - Parameters:
 	///   - index: index in which the query is performed.
@@ -18,14 +18,15 @@ extension Elastic {
 	///   - sort: array of `Order` objects to sort results.
 	///   - page: request cursor for pagination. `size` is also required.
 	///   - size: limit of result elements.
-	///   - completion: Block with array of hits that will run after search query is complete.
+	///   - completion: Block with array of found dictionary objects
+	///     that will run after search query is complete.
 	///		If request fails, empty array is returned.
 	public func search(_ index:String,
 					   query:Filter = .empty,
 					   sort:[Order] = [],
 					   page:UInt? = nil,
 					   size:UInt? = nil,
-					   completion: @escaping Completion.Hits) {
+					   completion: @escaping (Result<[[String:Any]]>)->Void) {
 
 		guard let baseUrl = configuration.baseUrl else {
 			fatalError("You did not call Elastic.configure(...) method")
@@ -48,9 +49,7 @@ extension Elastic {
 			if let page = page { params["from"] = page * size }
 		}
 
-		if configuration.debugPrintRequestBody {
-			_debugPrint(.requesting, "search results", url, params.jsonString)
-		}
+		_debugPrint(.requesting, "search results", url, params.jsonString)
 
 		HTTP.post(to: url,
 				  parameters: params) { result in
@@ -59,10 +58,7 @@ extension Elastic {
 					case .error(let error):
 						completion(.error(error))
 					case .data(let result):
-
-						if self.configuration.debugPrintResponseBody {
-							_debugPrint(.receiving, "search results", url, result.bodyString)
-						}
+						self._debugPrint(.receiving, "search results", url, result.bodyString)
 
 						guard let hitsResponse = result.data["hits"] as? [String: Any],
 							let hits = hitsResponse["hits"] as? [[String: Any]]
@@ -70,8 +66,6 @@ extension Elastic {
 								return completion(.error(ElasticError.parsingError))
 						}
 
-						// TO-DO: what if all these fail?
-						// probably can only happen if elastic changes api in the future
 						let items = hits.compactMap { $0["_source"] as? [String: Any] }
 
 						DispatchQueue.main.async {
@@ -93,7 +87,7 @@ extension Elastic {
 	///     If request fails, empty array is returned.
 	public func aggregate(_ index:String,
 						  with query:Aggregator,
-						  completion: @escaping Completion.Counts) {
+						  completion: @escaping (Result<[Aggregation]>)->Void) {
 		guard let baseUrl = configuration.baseUrl else {
 			fatalError("You did not call Elastic.configure(...) method")
 		}
@@ -101,9 +95,7 @@ extension Elastic {
 		let url = "\(baseUrl)/\(index)/_search?pretty"
 		let params = query.dict
 
-		if configuration.debugPrintRequestBody {
-			_debugPrint(.requesting, "aggregations", url, params.jsonString)
-		}
+		_debugPrint(.requesting, "aggregations", url, params.jsonString)
 
 		HTTP.post(to: url,
 				  parameters: params) { result in
@@ -112,10 +104,7 @@ extension Elastic {
 					case .error(let error):
 						completion(.error(error))
 					case .data(let result):
-
-						if self.configuration.debugPrintResponseBody {
-							_debugPrint(.receiving, "aggregations", url, result.bodyString)
-						}
+						self._debugPrint(.receiving, "aggregations", url, result.bodyString)
 
 						guard
 							let aggregations = result.data["aggregations"] as? [String: Any],
@@ -125,11 +114,11 @@ extension Elastic {
 								return completion(.error(ElasticError.parsingError))
 						}
 
-						let items:[(String, Int)] = buckets.compactMap { data in
+						let items:[Aggregation] = buckets.compactMap { data in
 							guard let key = data["key"] as? String,
 								let count = data["doc_count"] as? Int
 								else { return nil }
-							return (key, count)
+							return Aggregation(key, count)
 						}
 
 						DispatchQueue.main.async {
@@ -152,7 +141,7 @@ extension Elastic {
 	public func suggestCompletions(_ index:String,
 								   for query:String,
 								   field:String,
-								   _ completion: @escaping Completion.Strings) {
+								   _ completion: @escaping (Result<[String]>)->Void) {
 		guard let baseUrl = configuration.baseUrl else {
 			fatalError("You did not call Elastic.configure(...) method")
 		}
@@ -165,9 +154,7 @@ extension Elastic {
 										 "completion": ["field":field,
 														"skip_duplicates":true]]]]
 
-		if configuration.debugPrintRequestBody {
-			_debugPrint(.requesting, "suggest completions", url, params.jsonString)
-		}
+		_debugPrint(.requesting, "suggest completions", url, params.jsonString)
 
 		HTTP.post(to: url,
 				  parameters: params) { result in
@@ -176,10 +163,7 @@ extension Elastic {
 					case .error(let error):
 						completion(.error(error))
 					case .data(let result):
-
-						if self.configuration.debugPrintResponseBody {
-							_debugPrint(.receiving, "suggest completions", url, result.bodyString)
-						}
+						self._debugPrint(.receiving, "suggest completions", url, result.bodyString)
 
 						guard
 							let suggest = result.data["suggest"] as? [String:Any],

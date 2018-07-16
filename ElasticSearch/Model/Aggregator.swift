@@ -8,22 +8,20 @@
 
 import Foundation
 
-/// Method of sorting results.
-public enum SortingMethod:String {
-	case count = "_count",
-	term = "_term"
-}
-
 /// Object to set up an aggregation query.
 public struct Aggregator {
+
 	private	init() {}
 
 	/// Dictionary to use in the query.
 	public private(set) var dict:[String:Any] = [:]
 
 	/// Name of the json object that will hold the results.
-	public static let valuesName = "values"
+	internal static let valuesName = "values"
+}
 
+public extension Aggregator {
+	
 	/// Create an object that will set up aggregation query with required parameters.
 	///
 	/// - Parameters:

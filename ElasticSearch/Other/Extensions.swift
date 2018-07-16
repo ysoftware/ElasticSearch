@@ -10,22 +10,29 @@ import Foundation
 
 // MARK: - Special function to print debug information on requests
 
-internal enum DebugOperation { case requesting, receiving }
+public extension Elastic {
 
-internal func _debugPrint(_ op:DebugOperation,
-						  _ name:String,
-						  _ url:String,
-						  _ body:String) {
+	internal enum DebugOperation { case requesting, receiving }
 
-	let sending = op == .requesting
-	let arrow = sending ? "->" : "<-"
-	let operation = sending ? "Requesting" : "Receiving"
-	let word = sending ? "at" : "from"
+	internal func _debugPrint(_ op:DebugOperation,
+							  _ name:String,
+							  _ url:String,
+							  _ body:String) {
 
-	print("""
-		\(arrow) \(operation) \(name) \(word): \(url)
-		\(body)
-		""")
+		guard configuration.debugPrintRequestBody && op == .requesting
+			|| configuration.debugPrintResponseBody && op == .receiving
+			else { return }
+
+		let sending = op == .requesting
+		let arrow = sending ? "->" : "<-"
+		let operation = sending ? "Requesting" : "Receiving"
+		let word = sending ? "at" : "from"
+
+		print("""
+			\(arrow) \(operation) \(name) \(word): \(url)
+			\(body)
+			""")
+	}
 }
 
 internal extension Dictionary {

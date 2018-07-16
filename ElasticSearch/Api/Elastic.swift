@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// Api methods for making requests to ElasticSearch server.
+/// This version of the library is created and tested for ES 6.3.
 public struct Elastic {
 
 	/// Public initializer.
