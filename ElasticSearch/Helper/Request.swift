@@ -12,9 +12,9 @@ protocol ElasticRequest {
 
 	var indexName:String { get }
 
-	var filter:ElasticFilter { get }
+	var filter:Filter { get }
 
-	var sort:ElasticSort { get }
+	var sort:Order { get }
 
 	var page:Int { get }
 

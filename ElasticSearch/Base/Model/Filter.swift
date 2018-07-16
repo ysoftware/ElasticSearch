@@ -9,15 +9,15 @@
 import Foundation
 
 /// Object to set up a search query.
-public struct ElasticFilter {
+public struct Filter {
 	private	init() {}
 
 	/// Dictionary to use in the query.
 	public private(set) var dict:[String:Any] = [:]
 
 	/// Returns an empty filter.
-	public static var empty:ElasticFilter {
-		return ElasticFilter()
+	public static var empty:Filter {
+		return Filter()
 	}
 
 	// MARK: - Compound
@@ -25,7 +25,7 @@ public struct ElasticFilter {
 	/// Create a new compound filter to match all of the filters in the array. (AND)
 	///
 	/// - Parameter filters: filters to merge in this compound filter.
-	public init(matchAll filters:[ElasticFilter]) {
+	public init(matchAll filters:[Filter]) {
 		let filters = filters.filter { !$0.dict.isEmpty }
 		guard !filters.isEmpty else { return }
 		var dBool = [String:Any]()
@@ -39,7 +39,7 @@ public struct ElasticFilter {
 	///   - filters: filters to merge in this compound filter.
 	///   - minimum: number of filters that are required to be matched.
 	///     Default is 1, which means it will work as the standard OR.
-	public init(matchSome filters:[ElasticFilter], atLeast minimum:UInt = 1) {
+	public init(matchSome filters:[Filter], atLeast minimum:UInt = 1) {
 		let filters = filters.filter { !$0.dict.isEmpty }
 		guard !filters.isEmpty else { return }
 		var dBool = [String:Any]()
@@ -55,9 +55,9 @@ public struct ElasticFilter {
 	///   - field: field to match.
 	///   - values: array of values to look.
 	public init(matchField field:String, to values:[String]) {
-		var filters:[ElasticFilter] = []
+		var filters:[Filter] = []
 		values.forEach { value in
-			filters.append(ElasticFilter(matching: field, to: value))
+			filters.append(Filter(matching: field, to: value))
 		}
 		self.init(matchSome: filters, atLeast: 1)
 	}
@@ -70,7 +70,7 @@ public struct ElasticFilter {
 	/// - Parameters:
 	///   - filter: a filter to include as nested.
 	///   - path: path to the nested property.
-	public init(nested filter:ElasticFilter, in path:String) {
+	public init(nested filter:Filter, in path:String) {
 		var dNested = [String:Any]()
 		dNested["path"] = path
 		dNested["query"] = filter.dict

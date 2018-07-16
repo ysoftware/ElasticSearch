@@ -1,5 +1,5 @@
 //
-//  Sort.swift
+//  Order.swift
 //  ElasticSearch
 //
 //  Created by Yaroslav Erohin on 31.01.2018.
@@ -15,15 +15,15 @@ public enum ElasticDirection:String {
 }
 
 /// Object to set up sorting in a search query.
-public struct ElasticSort {
+public struct Order {
 	private	init() {}
 
 	/// Dictionary to use in the query.
 	public private(set) var dict:[String:[String:Any]] = [:]
 
 	/// Returns an empty filter.
-	public static var empty:ElasticSort {
-		return ElasticSort()
+	public static var empty:Order {
+		return Order()
 	}
 
 	/// Field type.

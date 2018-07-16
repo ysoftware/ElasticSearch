@@ -15,7 +15,7 @@ public enum SortingMethod:String {
 }
 
 /// Object to set up an aggregation query.
-public struct ElasticAggregator {
+public struct Aggregator {
 	private	init() {}
 
 	/// Dictionary to use in the query.
@@ -54,7 +54,7 @@ public struct ElasticAggregator {
 		dTerms["terms"] = dParams
 
 		var dValues:[String:Any] = [:]
-		dValues[ElasticAggregator.valuesName] = dTerms
+		dValues[Aggregator.valuesName] = dTerms
 
 		dict["aggs"] = dValues
 		dict["size"] = 0
