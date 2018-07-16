@@ -14,7 +14,7 @@ public struct Aggregator {
 	private	init() {}
 
 	/// Dictionary to use in the query.
-	public private(set) var dict:[String:Any] = [:]
+	public internal(set) var dict:[String:Any] = [:]
 
 	/// Name of the json object that will hold the results.
 	internal static let valuesName = "values"
