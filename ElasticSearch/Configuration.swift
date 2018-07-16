@@ -8,7 +8,8 @@
 
 import Foundation
 
-public struct ElasticConfiguration {
+/// List of settings for Elastic object.
+public class ElasticConfiguration {
 
 	/// Enables debug print of all json data sent and received.
 	public var debugPrintResponseBody = false

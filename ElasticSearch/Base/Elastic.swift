@@ -10,17 +10,15 @@ import Foundation
 
 public struct Elastic {
 
-	private init() {}
-
-	/// Enables debug print of all json data sent and received.
-	public static var configuration = ElasticConfiguration()
-
-	/// Configure all future requests for elastic search.
-	public static func configure(_ protocol: Protocol = .http,
-								 ip host:String,
-								 port:String = "9200") {
-		configuration.baseUrl = "\(`protocol`)://\(host):\(port)"
+	/// Public initializer.
+	///
+	/// - Parameter configuration: configuration object.
+	public init(with configuration:ElasticConfiguration) {
+		self.configuration = configuration
 	}
+
+	/// Configuration object for elastic search requests.
+	public let configuration:ElasticConfiguration
 
 	/// Perform search operation
 	///
@@ -32,7 +30,7 @@ public struct Elastic {
 	///   - size: limit of result elements.
 	///   - completion: Block with array of hits that will run after search query is complete.
 	///		If request fails, empty array is returned.
-	public static func search(_ index:String,
+	public func search(_ index:String,
 							  query:ElasticFilter = .empty,
 							  sort:[ElasticSort] = [],
 							  page:UInt? = nil,
@@ -72,7 +70,7 @@ public struct Elastic {
 						completion(.error(error))
 					case .data(let result):
 
-						if configuration.debugPrintResponseBody {
+						if self.configuration.debugPrintResponseBody {
 							_debugPrint(.receiving, "search results", url, result.bodyString)
 						}
 
@@ -103,7 +101,7 @@ public struct Elastic {
 	///   - query: Object of type `ElasticAggregator` that sets up required parameters.
 	///   - completion: Block with array of results that will run after query is complete.
 	///     If request fails, empty array is returned.
-	public static func aggregate(_ index:String,
+	public func aggregate(_ index:String,
 								 with query:ElasticAggregator,
 								 completion: @escaping Completion.Counts) {
 		guard let baseUrl = configuration.baseUrl else {
@@ -125,7 +123,7 @@ public struct Elastic {
 						completion(.error(error))
 					case .data(let result):
 
-						if configuration.debugPrintResponseBody {
+						if self.configuration.debugPrintResponseBody {
 							_debugPrint(.receiving, "aggregations", url, result.bodyString)
 						}
 
@@ -161,7 +159,7 @@ public struct Elastic {
 	///   - field: the property to perform search on.
 	///   - completion: Block with list of suggestions to complete the query.
 	///     If request fails, empty array is returned.
-	public static func suggestCompletions(_ index:String,
+	public func suggestCompletions(_ index:String,
 										  for query:String,
 										  field:String,
 										  _ completion: @escaping Completion.Strings) {
@@ -189,7 +187,7 @@ public struct Elastic {
 						completion(.error(error))
 					case .data(let result):
 
-						if configuration.debugPrintResponseBody {
+						if self.configuration.debugPrintResponseBody {
 							_debugPrint(.receiving, "suggest completions", url, result.bodyString)
 						}
 
