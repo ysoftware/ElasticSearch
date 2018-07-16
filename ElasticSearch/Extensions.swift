@@ -8,7 +8,28 @@
 
 import Foundation
 
-extension Dictionary {
+// MARK: - Special function to print debug information on requests
+
+internal enum DebugOperation { case requesting, receiving }
+
+internal func _debugPrint(_ op:DebugOperation,
+						  _ name:String,
+						  _ url:String,
+						  _ body:String) {
+
+	let sending = op == .requesting
+	let arrow = sending ? "->" : "<-"
+	let operation = sending ? "Requesting" : "Receiving"
+	let word = sending ? "at" : "from"
+
+	print("""
+		\(arrow) \(operation) \(name) \(word): \(url)
+		\(body)
+		""")
+}
+
+internal extension Dictionary {
+
 	var jsonString:String {
 		do {
 			let data = try JSONSerialization.data(withJSONObject: self as AnyObject,
@@ -22,7 +43,8 @@ extension Dictionary {
 	}
 }
 
-extension CharacterSet {
+internal extension CharacterSet {
+
 	var characters:[String] {
 		var chars = [String]()
 		for plane:UInt8 in 0...16 {
@@ -43,10 +65,12 @@ extension CharacterSet {
 	}
 }
 
-extension String {
+internal extension String {
+	
 	func trim() -> String {
 		return trimmingCharacters(in: .whitespacesAndNewlines)
 	}
+
 	func replacingCharacters(from sets:[CharacterSet], with new:String) -> String {
 		return replacingCharacters(from: sets.map { $0.characters.joined() }.joined(), with: new)
 	}

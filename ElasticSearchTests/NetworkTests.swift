@@ -14,55 +14,71 @@ class NetworkTests: XCTestCase {
 	let testUrl = "https://jsonplaceholder.typicode.com/posts"
 	let testUrlEmpty = "https://jsonplaceholder.typicode.com/post"
 	let testUrlFail = "http://ysoftware.ru/doctorwho/ENnews.xml"
-	let testUrlCorrupt = ""
+	let testUrlInvalid = "invalid url"
 
-	func testNetwork() {
+	func testNetworkSuccess() {
 		let expect = XCTestExpectation(description: "loading")
 		HTTP.post(to: testUrl) { result in
-			if result.count > 0 {
-				expect.fulfill()
-			}
-			else {
-				XCTAssert(false, "Network: result data is corrupt")
+			switch result {
+			case .data(let result):
+				if !result.data.isEmpty {
+					expect.fulfill()
+				}
+				else {
+					XCTFail("Should have succeeded")
+				}
+			case .error(let error):
+				XCTFail("\(error.localizedDescription)")
 			}
 		}
 		wait(for: [expect], timeout: 10)
 	}
 
-	func testNetworkEmpty() {
+	func testNetworkEmptyResult() {
 		let expect = XCTestExpectation(description: "loading")
 		HTTP.post(to: testUrlEmpty) { result in
-			if result.count == 0 {
-				expect.fulfill()
-			}
-			else {
-				XCTAssert(false, "Network: should have failed")
+			switch result {
+			case .data(let result):
+				if result.data.isEmpty {
+					expect.fulfill()
+				}
+				else {
+					XCTFail("Should have failed")
+				}
+			case .error(let error):
+				XCTFail("\(error.localizedDescription)")
 			}
 		}
 		wait(for: [expect], timeout: 10)
 	}
 
-	func testNetworkFail() {
+	func testNetworkParseFail() {
 		let expect = XCTestExpectation(description: "loading")
 		HTTP.post(to: testUrlFail) { result in
-			if result.count == 0 {
-				expect.fulfill()
-			}
-			else {
-				XCTAssert(false, "Network: should have failed")
+			switch result {
+			case .data(_):
+				XCTFail("Should have failed")
+			case .error(let error):
+				switch error {
+				case HTTPError.parsingError(_): expect.fulfill()
+				default: XCTFail("Incorrect error: \(error.localizedDescription)")
+				}
 			}
 		}
 		wait(for: [expect], timeout: 10)
 	}
 
-	func testNetworkUrlCorrupt() {
+	func testNetworkUrlInvalid() {
 		let expect = XCTestExpectation(description: "loading")
-		HTTP.post(to: testUrlCorrupt) { result in
-			if result.count == 0 {
-				expect.fulfill()
-			}
-			else {
-				XCTAssert(false, "Network: should have failed")
+		HTTP.post(to: testUrlInvalid) { result in
+			switch result {
+			case .data(_):
+				XCTFail("Should have failed")
+			case .error(let error):
+				switch error {
+				case HTTPError.malformedUrl: expect.fulfill()
+				default: XCTFail("Incorrect error: \(error.localizedDescription)")
+				}
 			}
 		}
 		wait(for: [expect], timeout: 10)

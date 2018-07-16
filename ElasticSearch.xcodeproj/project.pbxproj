@@ -17,6 +17,9 @@
 		711E875720EBBD8100C5D379 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711E875620EBBD8100C5D379 /* Networking.swift */; };
 		711E875920EBBFE000C5D379 /* NetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711E875820EBBFE000C5D379 /* NetworkTests.swift */; };
 		711E875B20EBC01700C5D379 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711E875A20EBC01700C5D379 /* Extensions.swift */; };
+		71DD260920FCBB7B00F5D052 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71DD260820FCBB7B00F5D052 /* Request.swift */; };
+		71DD260C20FCBD8300F5D052 /* Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71DD260B20FCBD8300F5D052 /* Methods.swift */; };
+		71DD260F20FCBDF200F5D052 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71DD260E20FCBDF200F5D052 /* Configuration.swift */; };
 		71FE0ABC20EC1CCB001D2319 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FE0ABB20EC1CCB001D2319 /* Types.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +48,9 @@
 		711E875820EBBFE000C5D379 /* NetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTests.swift; sourceTree = "<group>"; };
 		711E875A20EBC01700C5D379 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		7131B66620EC224000AD383E /* ElasticSearch.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ElasticSearch.podspec; sourceTree = SOURCE_ROOT; };
+		71DD260820FCBB7B00F5D052 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		71DD260B20FCBD8300F5D052 /* Methods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Methods.swift; sourceTree = "<group>"; };
+		71DD260E20FCBDF200F5D052 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		71FE0ABB20EC1CCB001D2319 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,13 +94,12 @@
 		711E873620EBBCC400C5D379 /* ElasticSearch */ = {
 			isa = PBXGroup;
 			children = (
-				711E874E20EBBCD800C5D379 /* Elastic.swift */,
-				711E875020EBBCD800C5D379 /* Filter.swift */,
-				711E875120EBBCD800C5D379 /* Sort.swift */,
-				711E874F20EBBCD800C5D379 /* Aggregator.swift */,
+				71DD260D20FCBD8700F5D052 /* Base */,
+				71DD260A20FCBD7300F5D052 /* Helper */,
+				71DD260E20FCBDF200F5D052 /* Configuration.swift */,
 				711E875620EBBD8100C5D379 /* Networking.swift */,
-				711E875A20EBC01700C5D379 /* Extensions.swift */,
 				71FE0ABB20EC1CCB001D2319 /* Types.swift */,
+				711E875A20EBC01700C5D379 /* Extensions.swift */,
 				711E873720EBBCC400C5D379 /* ElasticSearch.h */,
 				7131B66620EC224000AD383E /* ElasticSearch.podspec */,
 				711E873820EBBCC400C5D379 /* Info.plist */,
@@ -110,6 +115,26 @@
 				711E874420EBBCC400C5D379 /* Info.plist */,
 			);
 			path = ElasticSearchTests;
+			sourceTree = "<group>";
+		};
+		71DD260A20FCBD7300F5D052 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				71DD260820FCBB7B00F5D052 /* Request.swift */,
+				71DD260B20FCBD8300F5D052 /* Methods.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		71DD260D20FCBD8700F5D052 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				711E874E20EBBCD800C5D379 /* Elastic.swift */,
+				711E875020EBBCD800C5D379 /* Filter.swift */,
+				711E875120EBBCD800C5D379 /* Sort.swift */,
+				711E874F20EBBCD800C5D379 /* Aggregator.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,12 +246,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				711E875220EBBCD800C5D379 /* Elastic.swift in Sources */,
+				71DD260C20FCBD8300F5D052 /* Methods.swift in Sources */,
 				711E875B20EBC01700C5D379 /* Extensions.swift in Sources */,
 				711E875720EBBD8100C5D379 /* Networking.swift in Sources */,
 				71FE0ABC20EC1CCB001D2319 /* Types.swift in Sources */,
 				711E875520EBBCD800C5D379 /* Sort.swift in Sources */,
+				71DD260F20FCBDF200F5D052 /* Configuration.swift in Sources */,
 				711E875320EBBCD800C5D379 /* Aggregator.swift in Sources */,
 				711E875420EBBCD800C5D379 /* Filter.swift in Sources */,
+				71DD260920FCBB7B00F5D052 /* Request.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

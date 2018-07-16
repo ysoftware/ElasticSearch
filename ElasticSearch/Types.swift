@@ -8,13 +8,36 @@
 
 import Foundation
 
+public enum ElasticError: LocalizedError {
+
+	case parsingError
+
+	public var errorDescription: String? {
+		switch self {
+		case .parsingError: return "Parsing error"
+		}
+	}
+}
+
 public struct Completion {
-	public typealias Hits = ([[String:Any]])->Void
-	public typealias Counts = ([(String, Int)])->Void
-	public typealias Strings = ([String])->Void
+
+	public typealias Hits = (Result<[[String:Any]]>)->Void
+
+	public typealias Counts = (Result<[(String, Int)]>)->Void
+
+	public typealias Strings = (Result<[String]>)->Void
+}
+
+public enum Result<T> {
+
+	case data(T)
+
+	case error(Error)
 }
 
 public enum Protocol:String {
+
 	case http = "http"
+
 	case https = "https"
 }
