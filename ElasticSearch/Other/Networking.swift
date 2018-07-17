@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum HTTPError: LocalizedError {
+enum HTTPError: LocalizedError {
 	
 	case malformedUrl
 	case invalidResponse
@@ -25,9 +25,9 @@ internal enum HTTPError: LocalizedError {
 	}
 }
 
-internal typealias HTTPResponse = (bodyString:String, data:[String:Any])
+typealias HTTPResponse = (bodyString:String, data:[String:Any])
 
-internal struct HTTP {
+struct HTTP {
 	
 	static func post(to urlString:String,
 					 parameters:[String:Any] = [:],

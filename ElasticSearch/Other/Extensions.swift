@@ -12,9 +12,9 @@ import Foundation
 
 public extension Elastic {
 
-	internal enum DebugOperation { case requesting, receiving }
+	enum DebugOperation { case requesting, receiving }
 
-	internal func _debugPrint(_ op:DebugOperation,
+	func _debugPrint(_ op:DebugOperation,
 							  _ name:String,
 							  _ url:String,
 							  _ body:String) {
@@ -35,7 +35,7 @@ public extension Elastic {
 	}
 }
 
-internal extension Dictionary {
+extension Dictionary {
 
 	var jsonString:String {
 		do {
@@ -50,7 +50,7 @@ internal extension Dictionary {
 	}
 }
 
-internal extension CharacterSet {
+extension CharacterSet {
 
 	var characters:[String] {
 		var chars = [String]()
@@ -72,7 +72,7 @@ internal extension CharacterSet {
 	}
 }
 
-internal extension String {
+extension String {
 	
 	func trim() -> String {
 		return trimmingCharacters(in: .whitespacesAndNewlines)
