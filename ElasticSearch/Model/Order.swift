@@ -32,7 +32,7 @@ public extension Order {
 	///	  https://www.elastic.co/guide/en/elasticsearch/reference/current/
 	///   search-request-sort.html#_ignoring_unmapped_fields
 	public init(by field:String,
-		 _ direction:ElasticDirection = .descending,
+		 _ direction:Direction = .descending,
 		 unmappedType:UnmappedType? = nil) {
 		var dField = [String:Any]()
 		dField["order"] = direction.rawValue

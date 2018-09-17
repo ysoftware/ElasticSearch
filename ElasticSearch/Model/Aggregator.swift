@@ -32,7 +32,7 @@ public extension Aggregator {
 	///   - limit: maximum number of results.
 	public init(_ field: String,
 		 orderBy order:SortingMethod? = nil,
-		 _ direction: ElasticDirection = .descending,
+		 _ direction: Direction = .descending,
 		 minimumDocumentsCount count:UInt? = nil,
 		 limit: UInt? = nil) {
 
