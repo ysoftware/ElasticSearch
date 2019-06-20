@@ -33,12 +33,21 @@ public extension Order {
 	///   search-request-sort.html#_ignoring_unmapped_fields
 	public init(by field:String,
 		 _ direction:ElasticDirection = .descending,
-		 unmappedType:UnmappedType? = nil) {
+		 unmappedType:UnmappedType? = nil,
+         mode: String? = nil, inPath: String? = nil) {
 		var dField = [String:Any]()
 		dField["order"] = direction.rawValue
 		if let type = unmappedType {
 			dField["unmapped_type"] = type.rawValue
 		}
+        if let mode = mode {
+            guard let inPath = inPath else { return }
+            dField["mode"] = mode
+            var nestedField = [String:Any]()
+            nestedField["path"] = inPath
+            dField["nested"] = nestedField
+        }
 		dict[field] = dField
 	}
+    
 }
